@@ -1,4 +1,4 @@
-# cloud-itonami-9411
+# cloud-itonami-isic-9411
 
 Open Business Blueprint for **ISIC Rev.5 9411**: Activities of business and employers membership organizations.
 

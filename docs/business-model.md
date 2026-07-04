@@ -2,7 +2,7 @@
 
 ## Classification
 
-- Repository: `cloud-itonami-9411`
+- Repository: `cloud-itonami-isic-9411`
 - ISIC Rev.5: `9411`
 - Activity: activities of business and employers membership organizations -- representing and advocating for member businesses/employers
 - Social impact: community access, data sovereignty, transparent audit

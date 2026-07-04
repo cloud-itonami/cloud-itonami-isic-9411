@@ -1,4 +1,4 @@
-{:itonami.blueprint/id "cloud-itonami-9411"
+{:itonami.blueprint/id "cloud-itonami-isic-9411"
  :itonami.blueprint/name "Activities of business and employers membership organizations"
  :itonami.blueprint/isic-rev5 "9411"
  :itonami.blueprint/domain :services/business-membership-orgs
