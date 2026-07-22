@@ -31,10 +31,9 @@
   business trusting this association needs, and the evidence the
   association needs if a publication is later disputed or its
   lobbying-registration compliance challenged."
-  (:require #?(:clj  [clojure.edn :as edn]
-               :cljs [cljs.reader :as edn])
-            [bizassoc.registry :as registry]
-            [langchain.db :as d]))
+  (:require [bizassoc.registry :as registry]
+            [langchain.db :as d]
+            [langchain-store.core :as ls]))
 
 (defprotocol Store
   (position [s id])
@@ -145,16 +144,13 @@
   Map/compound values (verification/lobbying-screen payloads, ledger
   facts, position-publication records) are stored as EDN strings so
   `langchain.db` doesn't expand them into sub-entities -- the same
-  convention every sibling actor's store uses."
-  {:position/id                  {:db/unique :db.unique/identity}
-   :verification/position-id     {:db/unique :db.unique/identity}
-   :lobbying-screen/position-id  {:db/unique :db.unique/identity}
-   :ledger/seq                   {:db/unique :db.unique/identity}
-   :publication/seq              {:db/unique :db.unique/identity}
-   :sequence/jurisdiction        {:db/unique :db.unique/identity}})
-
-(defn- enc [v] (pr-str v))
-(defn- dec* [s] (when s (edn/read-string s)))
+  convention every sibling actor's store uses. The identity-schema
+  builder, EDN-blob codec and seq-keyed event-log read/append are the
+  shared kotoba-lang/langchain-store machinery (ADR-2607141600) -- the
+  seam ~190 actors hand-roll; this store keeps only its domain wiring."
+  (ls/identity-schema
+   [:position/id :verification/position-id :lobbying-screen/position-id
+    :ledger/seq :publication/seq :sequence/jurisdiction]))
 
 (defn- position->tx [{:keys [id position-name lobbying-registration-required? lobbying-registration-confirmed?
                              days-since-last-review max-review-interval-days
@@ -196,21 +192,15 @@
          (map #(pull->position (d/pull (d/db conn) position-pull [:position/id %])))
          (sort-by :id)))
   (lobbying-screen-of [_ id]
-    (dec* (d/q '[:find ?p . :in $ ?pid
+    (ls/dec* (d/q '[:find ?p . :in $ ?pid
                 :where [?k :lobbying-screen/position-id ?pid] [?k :lobbying-screen/payload ?p]]
               (d/db conn) id)))
   (verify-of [_ position-id]
-    (dec* (d/q '[:find ?p . :in $ ?pid
+    (ls/dec* (d/q '[:find ?p . :in $ ?pid
                 :where [?a :verification/position-id ?pid] [?a :verification/payload ?p]]
               (d/db conn) position-id)))
-  (ledger [_]
-    (->> (d/q '[:find ?s ?f :where [?e :ledger/seq ?s] [?e :ledger/fact ?f]] (d/db conn))
-         (sort-by first)
-         (mapv (comp dec* second))))
-  (publication-history [_]
-    (->> (d/q '[:find ?s ?r :where [?e :publication/seq ?s] [?e :publication/record ?r]] (d/db conn))
-         (sort-by first)
-         (mapv (comp dec* second))))
+  (ledger [_] (ls/read-stream conn :ledger/seq :ledger/fact))
+  (publication-history [_] (ls/read-stream conn :publication/seq :publication/record))
   (next-sequence [_ jurisdiction]
     (or (d/q '[:find ?n . :in $ ?j
               :where [?e :sequence/jurisdiction ?j] [?e :sequence/next ?n]]
@@ -224,10 +214,10 @@
       (d/transact! conn [(position->tx value)])
 
       :verification/set
-      (d/transact! conn [{:verification/position-id (first path) :verification/payload (enc payload)}])
+      (d/transact! conn [{:verification/position-id (first path) :verification/payload (ls/enc payload)}])
 
       :lobbying-screen/set
-      (d/transact! conn [{:lobbying-screen/position-id (first path) :lobbying-screen/payload (enc payload)}])
+      (d/transact! conn [{:lobbying-screen/position-id (first path) :lobbying-screen/payload (ls/enc payload)}])
 
       :position/mark-published
       (let [position-id (first path)
@@ -237,12 +227,12 @@
         (d/transact! conn
                      [(position->tx (assoc position-patch :id position-id))
                       {:sequence/jurisdiction jurisdiction :sequence/next next-n}
-                      {:publication/seq (count (publication-history s)) :publication/record (enc (get result "record"))}])
+                      {:publication/seq (count (publication-history s)) :publication/record (ls/enc (get result "record"))}])
         result)
       nil)
     s)
   (append-ledger! [s fact]
-    (d/transact! conn [{:ledger/seq (count (ledger s)) :ledger/fact (enc fact)}])
+    (d/transact! conn [{:ledger/seq (count (ledger s)) :ledger/fact (ls/enc fact)}])
     fact)
   (with-positions [s positions]
     (when (seq positions) (d/transact! conn (mapv position->tx (vals positions)))) s))
