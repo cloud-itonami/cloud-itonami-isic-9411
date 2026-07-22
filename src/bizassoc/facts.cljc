@@ -35,7 +35,34 @@
   associations -- inventing one to make coverage look bigger would be
   the exact fabrication this discipline forbids. See `bizassoc.
   governor/lobbying-registration-unconfirmed-violations` for how this
-  is handled as a CONDITIONAL check rather than a universal one.")
+  is handled as a CONDITIONAL check rather than a universal one.
+
+  The Netherlands (NLD) is ALSO seeded WITHOUT a `:lobbying-*`
+  sub-citation, but for a materially different reason than Japan's
+  (worth spelling out rather than collapsing the two into the same
+  'no regime' bucket): the Tweede Kamer (House of Representatives) has
+  run a public register of belangenbehartigers/lobbyisten since 1 July
+  2012, but it is a VOLUNTARY register tied to a physical building
+  access pass -- it does not cover organizations that lobby without
+  requesting a pass, and it discloses no activity, contacts, or
+  expenditure (confirmed directly from
+  https://www.tweedekamer.nl/contact_en_bezoek/lobbyisten). Separately,
+  as of the most recent primary source fetched for this catalog (a
+  brief from the minister of Binnenlandse Zaken en Koninkrijksrelaties
+  to the Tweede Kamer dated 8 May 2026, Kamerstuk 28844-303,
+  'Transparantie van besluitvorming lobbyregister'), the cabinet has
+  only ANNOUNCED an INTENT to introduce a mandatory lobbyregister --
+  a legislative process ('wetgevingstraject') and stakeholder
+  consultation are described as not yet complete, with a 'contouren-
+  brief' expected only in the autumn of 2026 and a Tweede Kamer
+  committee debate scheduled for 24 September 2026. There is therefore
+  NO enacted legal-basis article to cite yet for a Dutch mandatory
+  lobbying-registration regime akin to the US LDA / UK Registrar of
+  Consultant Lobbyists / Germany's Lobbyregistergesetz -- citing one
+  now would be fabricating a citation for a law that does not yet
+  exist. This is a live gap, not a permanent one: once the announced
+  wetsvoorstel is enacted, `bizassoc.facts/catalog`'s NLD entry should
+  be revisited to add the (then real) `:lobbying-*` sub-citation.")
 
 (def catalog
   "iso3 -> requirement map. `:required-evidence` mirrors the generic
@@ -92,7 +119,25 @@
                               "Veröffentlichungsmitteilung (publication-notice record)"]
           :lobbying-owner-authority "Deutscher Bundestag (Bundestagsverwaltung)"
           :lobbying-legal-basis "Gesetz über die Einrichtung und die Führung eines Lobbyregisters beim Deutschen Bundestag (Lobbyregistergesetz, 2021)"
-          :lobbying-provenance "https://www.lobbyregister.bundestag.de/"}})
+          :lobbying-provenance "https://www.lobbyregister.bundestag.de/"}
+   ;; NLD deliberately has NO `:lobbying-*` sub-citation -- see the
+   ;; ns docstring's "The Netherlands (NLD) is ALSO seeded WITHOUT..."
+   ;; paragraph for why this is a live, not-yet-enacted gap (an
+   ;; announced wetsvoorstel, per Kamerstuk 28844-303 of 8 May 2026)
+   ;; rather than Japan's "no such regime concept exists" absence.
+   ;; The pre-existing Tweede Kamer belangenbehartigers/lobbyisten
+   ;; register (since 1 July 2012) is a voluntary building-access-pass
+   ;; register, not a mandatory lobbying-activity-disclosure regime --
+   ;; it is deliberately NOT cited here as if it were the US/UK/DEU
+   ;; equivalent.
+   "NLD" {:name "Netherlands"
+          :owner-authority "Kamer van Koophandel (KVK) -- Handelsregister"
+          :legal-basis "Burgerlijk Wetboek (BW) Boek 2, Titel 2, Artikelen 26, 27, 29-30, 44-45 -- Verenigingsrecht (vereniging-oprichting via notariële akte/statuten, Handelsregister-inschrijvingsplicht, bestuur (governing-board) bestuurs- en vertegenwoordigingsbevoegdheid)"
+          :national-spec "BW Boek 2 art. 44 lid 1 / art. 45 lid 1: behoudens statutaire beperkingen is het bestuur belast met het besturen en vertegenwoordigen van de vereniging -- het dichtstbijzijnde Nederlandse analoog van een board-approved-extern-optreden-vereiste"
+          :provenance "https://wetten.overheid.nl/BWBR0003045/2024-01-01"
+          :required-evidence ["Notulen algemene ledenvergadering (member-consensus record)"
+                              "Bestuursbesluit (governing-body-approval record)"
+                              "Bekendmakingsbericht (publication-notice record)"]}})
 
 (defn spec-basis
   "The jurisdiction's requirement map, or nil -- nil means NO spec-basis,
@@ -135,8 +180,9 @@
   "The jurisdiction's lobbying-registration/disclosure requirement map,
   or nil -- nil means this jurisdiction has NO formal lobbyist/
   lobbying-organization registration regime this catalog is aware of
-  (honestly true for Japan as of this R0 catalog, unlike the US/UK/
-  Germany)."
+  (honestly true for Japan and the Netherlands as of this R0 catalog,
+  unlike the US/UK/Germany -- see `catalog`'s ns docstring for why
+  Japan's and the Netherlands' absences are for different reasons)."
   [iso3]
   (when-let [sb (spec-basis iso3)]
     (when (:lobbying-owner-authority sb)

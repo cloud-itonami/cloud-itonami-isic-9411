@@ -32,3 +32,22 @@
 
 (deftest unknown-jurisdiction-has-no-lobbying-spec-basis
   (is (nil? (facts/lobbying-spec-basis "ATL"))))
+
+(deftest nld-has-a-spec-basis
+  (let [sb (facts/spec-basis "NLD")]
+    (is (some? sb))
+    (is (= "Netherlands" (:name sb)))
+    (is (string? (:provenance sb)))
+    (is (string? (:legal-basis sb)))
+    (is (string? (:owner-authority sb)))
+    (is (= 3 (count (facts/evidence-checklist "NLD")))
+        "NLD has no lobbying-registration-review record -- same 3-item shape as JPN, not the 4-item USA/GBR/DEU shape")))
+
+(deftest nld-required-evidence-satisfied-needs-every-item
+  (let [all (facts/evidence-checklist "NLD")]
+    (is (facts/required-evidence-satisfied? "NLD" all))
+    (is (not (facts/required-evidence-satisfied? "NLD" (rest all))))))
+
+(deftest nld-honestly-has-no-lobbying-registration-regime
+  (is (nil? (facts/lobbying-spec-basis "NLD"))
+      "The Netherlands has, as of the primary sources fetched for this catalog, only an ANNOUNCED (not-yet-enacted) intent to introduce a mandatory lobbyregister (Kamerstuk 28844-303, 8 May 2026) -- the pre-existing Tweede Kamer register since 2012 is a voluntary building-access-pass register, not a mandatory lobbying-activity-disclosure regime, so this must NOT be fabricated as equivalent to USA/GBR/DEU"))
