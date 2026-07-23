@@ -62,7 +62,26 @@
   now would be fabricating a citation for a law that does not yet
   exist. This is a live gap, not a permanent one: once the announced
   wetsvoorstel is enacted, `bizassoc.facts/catalog`'s NLD entry should
-  be revisited to add the (then real) `:lobbying-*` sub-citation.")
+  be revisited to add the (then real) `:lobbying-*` sub-citation.
+
+  Canada (CAN) HAS a full `:lobbying-*` sub-citation, unlike Japan and
+  the Netherlands: the federal Lobbying Act (R.S.C., 1985, c. 44 (4th
+  Supp.)) requires 'the officer responsible for filing returns for a
+  corporation or organization' to register with the Commissioner of
+  Lobbying when an employee's communications with public office
+  holders about legislation, regulations, policy, programs, or
+  government funding 'constitute a significant part of the duties of
+  one employee' (s. 7(1)) -- a real, currently-in-force registration
+  duty a trade/business association's own in-house government-
+  relations staff would trigger, distinct from Japan's 'no such regime
+  concept exists' absence and the Netherlands' 'announced but not yet
+  enacted' gap. Canada's governance basis is federal, not provincial:
+  a trade/business association most commonly incorporates federally
+  as a not-for-profit corporation under the Canada Not-for-profit
+  Corporations Act (NFP Act, S.C. 2009, c. 23) via Corporations
+  Canada, whose s. 124 duty-to-manage provision is the direct
+  functional analogue of GBR's Companies Act director's-duties
+  citation and DEU's BGB Vorstand citation.")
 
 (def catalog
   "iso3 -> requirement map. `:required-evidence` mirrors the generic
@@ -137,7 +156,19 @@
           :provenance "https://wetten.overheid.nl/BWBR0003045/2024-01-01"
           :required-evidence ["Notulen algemene ledenvergadering (member-consensus record)"
                               "Bestuursbesluit (governing-body-approval record)"
-                              "Bekendmakingsbericht (publication-notice record)"]}})
+                              "Bekendmakingsbericht (publication-notice record)"]}
+   "CAN" {:name "Canada"
+          :owner-authority "Corporations Canada, Innovation, Science and Economic Development Canada (ISED)"
+          :legal-basis "Canada Not-for-profit Corporations Act (S.C. 2009, c. 23), s. 124 -- duty to manage or supervise management"
+          :national-spec "NFP Act s. 124: 'Subject to this Act, the articles and any unanimous member agreement, the directors shall manage or supervise the management of the activities and affairs of a corporation.'"
+          :provenance "https://laws-lois.justice.gc.ca/eng/acts/C-7.75/FullText.html"
+          :required-evidence ["Member-consensus record"
+                              "Governing-body-approval record"
+                              "Lobbying-registration-review record"
+                              "Publication-notice record"]
+          :lobbying-owner-authority "Office of the Commissioner of Lobbying of Canada (OCL)"
+          :lobbying-legal-basis "Lobbying Act (R.S.C., 1985, c. 44 (4th Supp.)), s. 7 -- in-house lobbyist registration for corporations and organizations"
+          :lobbying-provenance "https://laws-lois.justice.gc.ca/eng/acts/l-12.4/FullText.html"}})
 
 (defn spec-basis
   "The jurisdiction's requirement map, or nil -- nil means NO spec-basis,
