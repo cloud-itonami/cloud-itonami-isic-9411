@@ -51,3 +51,28 @@
 (deftest nld-honestly-has-no-lobbying-registration-regime
   (is (nil? (facts/lobbying-spec-basis "NLD"))
       "The Netherlands has, as of the primary sources fetched for this catalog, only an ANNOUNCED (not-yet-enacted) intent to introduce a mandatory lobbyregister (Kamerstuk 28844-303, 8 May 2026) -- the pre-existing Tweede Kamer register since 2012 is a voluntary building-access-pass register, not a mandatory lobbying-activity-disclosure regime, so this must NOT be fabricated as equivalent to USA/GBR/DEU"))
+
+(deftest can-has-a-spec-basis
+  (let [sb (facts/spec-basis "CAN")]
+    (is (some? sb))
+    (is (= "Canada" (:name sb)))
+    (is (string? (:provenance sb)))
+    (is (string? (:legal-basis sb)))
+    (is (string? (:owner-authority sb)))
+    (is (= 4 (count (facts/evidence-checklist "CAN")))
+        "CAN has a lobbying-registration-review record -- same 4-item shape as USA/GBR/DEU")))
+
+(deftest can-required-evidence-satisfied-needs-every-item
+  (let [all (facts/evidence-checklist "CAN")]
+    (is (facts/required-evidence-satisfied? "CAN" all))
+    (is (not (facts/required-evidence-satisfied? "CAN" (rest all))))))
+
+(deftest can-has-a-lobbying-spec-basis
+  (is (some? (facts/lobbying-spec-basis "CAN")))
+  (is (string? (:lobbying-provenance (facts/lobbying-spec-basis "CAN"))))
+  (is (string? (:lobbying-legal-basis (facts/lobbying-spec-basis "CAN")))))
+
+(deftest coverage-includes-can-alongside-all-others
+  (let [report (facts/coverage ["JPN" "USA" "GBR" "DEU" "NLD" "CAN"])]
+    (is (= 6 (:covered report)))
+    (is (= ["CAN" "DEU" "GBR" "JPN" "NLD" "USA"] (:covered-jurisdictions report)))))
