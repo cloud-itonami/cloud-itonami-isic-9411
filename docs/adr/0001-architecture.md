@@ -127,7 +127,7 @@ status-lifecycle bug (ADR-2607071320).
 `bizassoc.store/Store` is implemented by both `MemStore` (atom-backed,
 default for dev/tests/demo) and `DatomicStore` (`langchain.db`-
 backed), proven to satisfy the same contract in
-`test/bizassoc/store_contract_test.clj` -- the same seam every sibling
+`test/bizassoc/store_contract_test.kotoba` -- the same seam every sibling
 actor uses so swapping the SSoT backend is a configuration change, not
 a rewrite.
 
@@ -197,7 +197,7 @@ low-confidence noop rather than ever auto-publishing a position).
   variant), grep-verified absent from every prior sibling before the
   claim was finalized.
 - `MemStore` ‖ `DatomicStore` parity is proven by
-  `test/bizassoc/store_contract_test.clj`, the same `:db-api`-driven
+  `test/bizassoc/store_contract_test.kotoba`, the same `:db-api`-driven
   swap pattern every sibling actor uses.
 - 34 tests / 134 assertions pass; lint is clean; the demo
   (`clojure -M:dev:run`) walks one clean actuation lifecycle plus four
