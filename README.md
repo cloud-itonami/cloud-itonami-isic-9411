@@ -145,7 +145,7 @@ independent layers enforce this (`bizassoc.governor`'s `:actuation/
 publish-position` high-stakes gate and `bizassoc.phase`'s phase table,
 which never puts `:actuation/publish-position` in any phase's `:auto`
 set) -- see `bizassoc.phase`'s docstring and
-`test/bizassoc/phase_test.clj`'s
+`test/bizassoc/phase_test.kotoba`'s
 `publish-position-never-auto-at-any-phase`. The actor may draft, check
 and recommend; a human governing-body officer is always the one who
 actually publishes a position. Matching every prior single-actuation
@@ -238,14 +238,14 @@ reference at all.
 
 | File | Role |
 |---|---|
-| `src/bizassoc/store.cljc` | **Store** protocol -- `MemStore` ‖ `DatomicStore` (`langchain.db`) + append-only audit ledger + position-publication history. No dynamically-filed sub-record -- the actuation op acts directly on a pre-seeded position, and the double-actuation guard checks a dedicated `:published?` boolean rather than a `:status` value |
-| `src/bizassoc/registry.cljc` | Position-publication draft records, plus `position-review-overdue?` -- an HONEST, literal reuse of `memberorg.registry`'s own FOURTEENTH-instance MAXIMUM-ceiling check (the FIFTEENTH instance overall), not claimed as new |
-| `src/bizassoc/facts.cljc` | Per-jurisdiction association-governance catalog AND a SEPARATE lobbying-registration/disclosure citation per jurisdiction (present for USA/GBR/DEU, honestly ABSENT for Japan, which has no direct equivalent regime) with an official spec-basis citation per entry, honest coverage reporting |
-| `src/bizassoc/assocopsllm.cljc` | **AssocOps-LLM** -- `mock-advisor` ‖ `llm-advisor`; intake/jurisdiction-verification/lobbying-registration-screening/publication proposals |
-| `src/bizassoc/governor.cljc` | **Association Governance Governor** -- 4 HARD checks (spec-basis · evidence-incomplete · lobbying-registration-unconfirmed, CONDITIONAL unconditional-evaluation, GENUINELY NEW, the 64th grounding of this discipline and the SECOND conditional variant · position-review-overdue, MAXIMUM-ceiling honest reuse, the 15th instance) + 1 guard (already-published) + 1 soft (confidence/actuation gate) |
-| `src/bizassoc/phase.cljc` | **Phase 0→3** -- read-only → assisted intake → assisted verify → supervised (position publication always human; member intake is the ONLY auto-eligible op, no direct capital risk) |
-| `src/bizassoc/operation.cljc` | **OperationActor** -- langgraph StateGraph |
-| `src/bizassoc/sim.cljc` | demo driver |
+| `src/bizassoc/store.kotoba` | **Store** protocol -- `MemStore` ‖ `DatomicStore` (`langchain.db`) + append-only audit ledger + position-publication history. No dynamically-filed sub-record -- the actuation op acts directly on a pre-seeded position, and the double-actuation guard checks a dedicated `:published?` boolean rather than a `:status` value |
+| `src/bizassoc/registry.kotoba` | Position-publication draft records, plus `position-review-overdue?` -- an HONEST, literal reuse of `memberorg.registry`'s own FOURTEENTH-instance MAXIMUM-ceiling check (the FIFTEENTH instance overall), not claimed as new |
+| `src/bizassoc/facts.kotoba` | Per-jurisdiction association-governance catalog AND a SEPARATE lobbying-registration/disclosure citation per jurisdiction (present for USA/GBR/DEU, honestly ABSENT for Japan, which has no direct equivalent regime) with an official spec-basis citation per entry, honest coverage reporting |
+| `src/bizassoc/assocopsllm.kotoba` | **AssocOps-LLM** -- `mock-advisor` ‖ `llm-advisor`; intake/jurisdiction-verification/lobbying-registration-screening/publication proposals |
+| `src/bizassoc/governor.kotoba` | **Association Governance Governor** -- 4 HARD checks (spec-basis · evidence-incomplete · lobbying-registration-unconfirmed, CONDITIONAL unconditional-evaluation, GENUINELY NEW, the 64th grounding of this discipline and the SECOND conditional variant · position-review-overdue, MAXIMUM-ceiling honest reuse, the 15th instance) + 1 guard (already-published) + 1 soft (confidence/actuation gate) |
+| `src/bizassoc/phase.kotoba` | **Phase 0→3** -- read-only → assisted intake → assisted verify → supervised (position publication always human; member intake is the ONLY auto-eligible op, no direct capital risk) |
+| `src/bizassoc/operation.kotoba` | **OperationActor** -- langgraph StateGraph |
+| `src/bizassoc/sim.kotoba` | demo driver |
 | `test/bizassoc/*_test.clj` | governor contract · phase invariants · store parity · registry conformance · facts coverage |
 
 ## Business-process coverage (honest)
