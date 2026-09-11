@@ -200,7 +200,7 @@ low-confidence noop rather than ever auto-publishing a position).
   `test/bizassoc/store_contract_test.kotoba`, the same `:db-api`-driven
   swap pattern every sibling actor uses.
 - 34 tests / 134 assertions pass; lint is clean; the demo
-  (`clojure -M:dev:run`) walks one clean actuation lifecycle plus four
+  (`kbb -M:dev:run`) walks one clean actuation lifecycle plus four
   HARD-hold scenarios end-to-end.
 - `blueprint.edn` required no field-sync fixes this time (already
   correct) -- only the `:maturity` flip itself.
