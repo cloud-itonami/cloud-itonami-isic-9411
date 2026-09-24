@@ -1,0 +1,34 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:dev:physics` runs it.
+;;
+;; README "Robotics premise": a document-courier robot handles physical
+;; member-mailing fulfillment for a business / employers' association
+;; (ISIC 9411), gated by the Association Governance Governor. Its physical
+;; work is carrying trays of member mailings from the print room to the post
+;; room, and loading the trays onto a postal roll cage.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis.
+;; Replacing an estimate with a sourced value is this bot's growth work.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-isic-9411"
+ :cases
+ [{:id :mailing-trays-to-post-room
+   :kind :transport
+   :procedure "courier robot carries a 60 kg stack of filled member-mailing trays from the print room to the post room, for each candidate post-room distance"
+   :params {:mass-kg 40.0 :payload-kg 60.0 :v-max-mps 1.0 :a-max-mps2 0.5
+            :brake-decel-mps2 0.8 :drive-force-n 110.0 :crr 0.02
+            :cog-height-m 0.40 :support-half-length-m 0.25 :payload-cog-height-m 0.75
+            :max-time-s 1800.0}
+   :sweep {:param :distance-m :values [40.0 60.0 80.0 100.0 120.0 140.0]}
+   :quantity :cycle-time-s
+   :limit {:max 100.0 :basis "estimate: one print-room-to-post-room leg within the daily post collection window, allowing for doors"}
+   :boundary {:lo 10.0 :hi 300.0}}
+  {:id :tray-onto-roll-cage
+   :kind :manipulator
+   :procedure "arm lifts a filled mail tray from the robot deck onto the top shelf of the postal roll cage"
+   :params {:l1-m 0.45 :l2-m 0.40 :m1-kg 4.0 :m2-kg 3.0
+            :from [0.55 0.10] :to [0.25 0.75] :duration-s 2.5 :steps 500}
+   :sweep {:param :payload-kg :values [2.0 4.0 6.0 8.0 10.0 12.0]}
+   :quantity :peak-tau1-nm
+   :limit {:max 90.0 :basis "estimate: continuous shoulder torque of a 7 kg-class collaborative arm; a full letter tray is taken as up to ~10 kg"}
+   :boundary {:lo 0.5 :hi 30.0}}]}
